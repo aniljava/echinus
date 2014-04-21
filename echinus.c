@@ -1278,6 +1278,7 @@ mousemove(Client * c) {
 		switch (ev.type) {
 		case ButtonRelease:
 			XUngrabPointer(dpy, CurrentTime);
+			XSync(dpy, False);
 			return;
 		case ConfigureRequest:
 		case Expose:
@@ -1285,7 +1286,7 @@ mousemove(Client * c) {
 			handler[ev.type] (&ev);
 			break;
 		case MotionNotify:
-			XSync(dpy, False);
+			//XSync(dpy, False);
 			/* we are probably moving to a different monitor */
 			if (!(nm = curmonitor()))
 				break;
@@ -1341,6 +1342,7 @@ mouseresize(Client * c) {
 			XWarpPointer(dpy, None, c->win, 0, 0, 0, 0,
 			    c->w + c->border - 1, c->h + c->border - 1);
 			XUngrabPointer(dpy, CurrentTime);
+			XSync(dpy, False);
 			while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 			return;
 		case ConfigureRequest:
@@ -1349,7 +1351,7 @@ mouseresize(Client * c) {
 			handler[ev.type] (&ev);
 			break;
 		case MotionNotify:
-			XSync(dpy, False);
+			//XSync(dpy, False);
 			if ((nw = ev.xmotion.x - ocx - 2 * c->border + 1) <= 0)
 				nw = MINWIDTH;
 			if ((nh = ev.xmotion.y - ocy - 2 * c->border + 1) <= 0)
@@ -1528,7 +1530,7 @@ resize(Client * c, int x, int y, int w, int h, Bool sizehints) {
 		XMoveResizeWindow(dpy, c->frame, c->x, c->y, c->w, c->h);
 		XMoveResizeWindow(dpy, c->win, 0, c->th, c->w, c->h - c->th);
 		configure(c);
-		XSync(dpy, False);
+		//XSync(dpy, False);
 	}
 }
 
